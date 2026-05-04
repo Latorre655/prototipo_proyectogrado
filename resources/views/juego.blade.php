@@ -5,12 +5,35 @@
     <title>Juego RPG</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        html, body { width: 100%; height: 100%; background: #000; overflow: hidden; }
-        #unity-canvas { width: 100%; height: 100vh; display: block; }
+        html, body {
+            width: 100%;
+            height: 100%;
+            background: #000;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #unity-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #unity-canvas {
+            width: 100%;
+            height: 100%;
+            aspect-ratio: 16 / 9;
+            max-width: calc(100vh * 16 / 9);
+            max-height: calc(100vw * 9 / 16);
+        }
     </style>
 </head>
 <body>
-    <canvas id="unity-canvas"></canvas>
+    <div id="unity-container">
+        <canvas id="unity-canvas"></canvas>
+    </div>
     <script src="/game/Build/game.loader.js"></script>
     <script>
         createUnityInstance(document.querySelector("#unity-canvas"), {
