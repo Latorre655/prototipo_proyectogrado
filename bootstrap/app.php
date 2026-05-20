@@ -12,7 +12,10 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->validateCsrfTokens(except: [
-            '/login-check'
+            '/login-check',
+            '/tutorial-completado',
+            '/progreso/guardar',
+            '/progreso/consultar'
         ]);
         $middleware->redirectGuestsTo(fn() => null);
     })

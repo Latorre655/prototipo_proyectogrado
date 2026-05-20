@@ -11,27 +11,46 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $user = DB::table('students')
-                  ->where('usuario', $request->usuario)
-                  ->first();
+                ->where('usuario', $request->usuario)
+                ->first();
 
         if (!$user) {
             return response()->json([
                 'success' => false,
-                'message' => 'Credenciales invalidas'
+                'message' => 'Usuario incorrecto.'
             ]);
         }
 
         if (!Hash::check($request->contrasena, $user->contrasena)) {
             return response()->json([
                 'success' => false,
-                'message' => 'Credenciales invalidas'
+                'message' => 'Contraseña incorrecta.'
             ]);
         }
 
+        DB::table('students')
+            ->where('usuario', $request->usuario)
+            ->update(['ultimo_acceso' => now()]);
+
+        $ultimoAcceso = DB::table('students')
+            ->where('usuario', $request->usuario)
+            ->value('ultimo_acceso');
+
         return response()->json([
-            'success' => true,
-            'message' => 'Login exitoso.',
-            'nombre'  => $user->nombre
+            'success'               => true,
+            'message'               => 'Login exitoso.',
+            'nombre'                => $user->nombre,
+            'tutorial_completado'   => $user->tutorial_completado,
+            'ultimo_acceso'         => $ultimoAcceso
         ]);
+    }
+
+    public function marcarTutorial(Request $request)
+    {
+        DB::table('students')
+            ->where('usuario', $request->usuario)
+            ->update(['tutorial_completado' => true]);
+
+        return response()->json(['success' => true]);
     }
 }
